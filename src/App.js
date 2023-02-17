@@ -1,12 +1,12 @@
-import React from 'react';
+import logo from './logo.svg';
 import './App.css';
-import AddUser from "./components/AddUser";
+import AddUser from './components/AddUser';
 
 function App() {
   return (
-    <>
-      <AddUser />
-    </>
+    <div>
+      <AddUser /> 
+    </div>
   );
 }
 

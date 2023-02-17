@@ -14,7 +14,7 @@
 .input input {
     font: inherit;
     display: block;
-    width: 1px solid white;
+    width: 1px solid #ccc;
     padding: 0.15rem;
     margin-bottom: 0.5rem;
 }

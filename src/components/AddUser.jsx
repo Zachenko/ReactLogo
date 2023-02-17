@@ -1,49 +1,62 @@
-import React, { useState } from "react";
-import Card from "../UI/Card";
-import classes from "./AddUser.module.css";
-import Button from "../UI/Button";
+import React, { useState} from 'react'; 
+import Card from '../UI/Card';
+import classes from './AddUser.module.css' ;
+import Button from '../UI/Button';
+import ErrorModal from '../UI/ErrorModal';
 
 function AddUser() {
 
     const [name, setName] = useState('')
     const [age, setAge] = useState('')
+    const [errorModal, setErrorModal] = useState(null)
 
-    function namedChangeHandler(event) {
-        setName(event.target.value);
-        //console.dir(name)
+    function namedChangeHandler(event){
+        setName(event.target.value)
+        
     }
 
-    function ageChangeHandler(event) {
+    function ageChangeHandler(event){
         setAge(event.target.value);
-        //  console.dir(age)
+        console.log(age)
     }
 
-    function addUserHandler(event) {
+    function addUserHandler(event){
         event.preventDefault();
-        console.dir(`${name} ${age}`)
-        setName('')
-        setAge('')
+        //console.log(name, age);
+
+        if (+age < 1) {
+            setErrorModal({
+                title: "Błędny wiek",
+                msg: "Wiek musi myć > 0"
+            });
+        }
+
+        setAge('');
+        setName('');
     }
-    
+
     return (
-        <Card className={classes.input}>
-            <form onSubmit={addUserHandler}>
+        <>
+            {errorModal && <ErrorModal title={errorModal.title} msg={errorModal.msg} />}
+            <Card className={classes.input}>
+            <form onSubmit={addUserHandler} >
                 <label htmlFor="username">Username</label>
                 <input id="username" type="text"
-                    onChange={namedChangeHandler}
+                    onChange={namedChangeHandler} 
                     value={name}
-                /><br/><br/>
-
-                <label htmlFor="age">Age</label>
-                <input id="age" type="number"
-                    onChange={ageChangeHandler}
-                    value={age}
                 />
 
-                <Button myType="submit">Add user</Button>
+                <label htmlFor="age">Age</label>
+                <input id="age" type="Number" 
+                        onChange={ageChangeHandler}
+                        value={age}
+                />
+
+                <Button myType="submit"> Add user </Button>
             </form>
-        </Card>
-    )
+            </Card>
+        </>
+    );
 }
 
 export default AddUser;
