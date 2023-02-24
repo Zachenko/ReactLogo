@@ -10,17 +10,16 @@ function AddUser() {
     const [age, setAge] = useState('')
     const [errorModal, setErrorModal] = useState(null)
 
-    function namedChangeHandler(event){
+    function namedChangeHandler(event) {
         setName(event.target.value)
-        
     }
 
-    function ageChangeHandler(event){
+    function ageChangeHandler(event) {
         setAge(event.target.value);
         console.log(age)
     }
 
-    function addUserHandler(event){
+    function addUserHandler(event) {
         event.preventDefault();
         //console.log(name, age);
 
@@ -35,9 +34,13 @@ function AddUser() {
         setName('');
     }
 
+    const errorHandler = () => {
+        setErrorModal(null)
+    };
+
     return (
         <>
-            {errorModal && <ErrorModal title={errorModal.title} msg={errorModal.msg} />}
+            {errorModal && <ErrorModal title={errorModal.title} msg={errorModal.msg} removeError={errorHandler}/>}
             <Card className={classes.input}>
             <form onSubmit={addUserHandler} >
                 <label htmlFor="username">Username</label>
