@@ -35,12 +35,14 @@ function AddUser() {
         const fbData = await responce.json();
         const loadedData = [];
 
-        // for (const key in fbData) {
-        //     loadedData.push({
+        for (const key in fbData) {
+            loadedData.push({
+                sase: fbData[key].case
+            })
+        }
 
-        //     })
-        // }
-    })
+        console.log(fbData)
+    });
 
     function namedChangeHandler(event) {
         setName(event.target.value)
