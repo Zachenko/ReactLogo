@@ -3,34 +3,98 @@ import Card from '../UI/Card';
 import classes from './AddUser.module.css' ;
 import Button from '../UI/Button';
 import ErrorModal from '../UI/ErrorModal';
+import GettedMessage from '../UI/GettedMessage'
 
 // https://zbreactlogofb-default-rtdb.firebaseio.com/
 
 function AddUser() {
-
-
 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState(null);
+    const [messageData, setMessageData] = useState("")
     
-    function addUserHandler(event) {
+    async function addUserHandler(event) {
         event.preventDefault();
 
-        if (+age < 1) {
+        if (name.length < 3) {
+            setErrorModal({
+                title: "Błędny name",
+                msg: "name musi myć >= 3"
+            });
+            return
+        } else if (+age < 1) {
             setErrorModal({
                 title: "Błędny wiek",
                 msg: "Wiek musi myć > 0"
             });
+            return
+
+        } else if (password.length < 8) {
+            setErrorModal({
+                title: "Błędny password",
+                msg: "password musi myć >= 10"
+            });
+            return
+
         }
+
+        setMessageData({
+            name: name,
+            age: age,
+            email: email,
+            password: password
+        })
+
+        const message_obj = {
+            message: messageData
+        }
+
+        const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json',
+        {
+            method: 'POST',
+            body: JSON.stringify(messageData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
         setAge('');
         setName('');
+        setEmail('');
+        setPassword('');
     }
 
-    const getDataHandler = useCallback(async () => {
+    function asd() {
+        return (
+            <GettedMessage />
+        )
+    }
+
+    // const getDataHandler = useCallback(async () => {
+    //     const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json');
+    //     const fbData = await responce.json();
+    //     const loadedData = [];
+
+    //     for (const key in fbData) {
+    //         loadedData.push({
+    //             case: fbData[key].case
+    //         })
+    //     }
+
+    //     setMessageData(fbData);
+        
+    //     return (
+    //         <>
+    //            <p>sdsdsd</p>
+    //         </>
+    //     )
+    // });
+
+    async function getDataHandler() {
+
         const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json');
         const fbData = await responce.json();
         const loadedData = [];
@@ -41,8 +105,8 @@ function AddUser() {
             })
         }
 
-        console.log(fbData)
-    });
+        console.log(loadedData)
+    }
 
     function namedChangeHandler(event) {
         setName(event.target.value)
@@ -63,6 +127,10 @@ function AddUser() {
     const errorHandler = () => {
         setErrorModal(null)
     };
+
+    // useEffect(() => {
+    //     getDataHandler()
+    // }, [getDataHandler]);
 
     return (
         <>
@@ -97,6 +165,9 @@ function AddUser() {
                 <Button myType="button" onClick={getDataHandler}> Get data </Button>
             </form>
             </Card>
+
+            <button type='button' style={{padding: '100px'}} onClick={getDataHandler}></button>  
+             <GettedMessage />
         </>
     );
 }
