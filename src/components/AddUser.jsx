@@ -68,8 +68,6 @@ function AddUser() {
         setPassword('');
     }
 
-    
-
     const getDataHandler = useCallback(async () => {
 
         const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json');
@@ -82,8 +80,7 @@ function AddUser() {
             })
         }
         
-        setData(loadedData)
-        console.log(data[0].message)
+        console.log(loadedData)
     });
 
     function namedChangeHandler(event) {
@@ -108,7 +105,7 @@ function AddUser() {
 
     useEffect(() => {
         getDataHandler()
-    }, []);
+    }, [getDataHandler]);
 
     return (
         <>
@@ -144,9 +141,6 @@ function AddUser() {
             </form>
             </Card>
             
-            {
-                
-            }
         </>
     );
 }
