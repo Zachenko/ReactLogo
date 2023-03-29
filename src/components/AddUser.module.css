@@ -18,3 +18,10 @@
     padding: 0.15rem;
     margin-bottom: 0.5rem;
 }
+
+.message {
+    margin: 2rem auto;
+    padding: 1rem;
+    width: 70%;
+    max-width: 40rem;
+}

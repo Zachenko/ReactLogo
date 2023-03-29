@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; 
+import React, { useState, useEffect, useCallback } from 'react';
 import Card from '../UI/Card';
 import classes from './AddUser.module.css' ;
 import Button from '../UI/Button';
@@ -14,7 +14,8 @@ function AddUser() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState(null);
-    const [messageData, setMessageData] = useState("")
+    const [messageData, setMessageData] = useState({});
+    const [data, setData] = useState("")
     
     async function addUserHandler(event) {
         event.preventDefault();
@@ -67,33 +68,9 @@ function AddUser() {
         setPassword('');
     }
 
-    function asd() {
-        return (
-            <GettedMessage />
-        )
-    }
+    
 
-    // const getDataHandler = useCallback(async () => {
-    //     const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json');
-    //     const fbData = await responce.json();
-    //     const loadedData = [];
-
-    //     for (const key in fbData) {
-    //         loadedData.push({
-    //             case: fbData[key].case
-    //         })
-    //     }
-
-    //     setMessageData(fbData);
-        
-    //     return (
-    //         <>
-    //            <p>sdsdsd</p>
-    //         </>
-    //     )
-    // });
-
-    async function getDataHandler() {
+    const getDataHandler = useCallback(async () => {
 
         const responce = await fetch('https://zbreactlogofb-default-rtdb.firebaseio.com/react_logowanie.json');
         const fbData = await responce.json();
@@ -101,12 +78,13 @@ function AddUser() {
 
         for (const key in fbData) {
             loadedData.push({
-                sase: fbData[key].case
+                message: fbData[key]
             })
         }
-
-        console.log(loadedData)
-    }
+        
+        setData(loadedData)
+        console.log(data[0].message)
+    });
 
     function namedChangeHandler(event) {
         setName(event.target.value)
@@ -128,9 +106,9 @@ function AddUser() {
         setErrorModal(null)
     };
 
-    // useEffect(() => {
-    //     getDataHandler()
-    // }, [getDataHandler]);
+    useEffect(() => {
+        getDataHandler()
+    }, []);
 
     return (
         <>
@@ -165,9 +143,10 @@ function AddUser() {
                 <Button myType="button" onClick={getDataHandler}> Get data </Button>
             </form>
             </Card>
-
-            <button type='button' style={{padding: '100px'}} onClick={getDataHandler}></button>  
-             <GettedMessage />
+            
+            {
+                
+            }
         </>
     );
 }
