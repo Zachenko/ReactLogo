@@ -3,7 +3,7 @@ import Card from '../UI/Card';
 import classes from './AddUser.module.css' ;
 import Button from '../UI/Button';
 import ErrorModal from '../UI/ErrorModal';
-import GettedMessage from '../UI/GettedMessage'
+
 
 // https://zbreactlogofb-default-rtdb.firebaseio.com/
 
@@ -15,7 +15,8 @@ function AddUser() {
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState(null);
     const [messageData, setMessageData] = useState({});
-    const [data, setData] = useState("")
+    const [allowData, setAllowData] = useState(null);
+    const [data, setData] = useState("");
     
     async function addUserHandler(event) {
         event.preventDefault();
@@ -26,6 +27,7 @@ function AddUser() {
                 msg: "name musi myć >= 3"
             });
             return
+
         } else if (+age < 1) {
             setErrorModal({
                 title: "Błędny wiek",
@@ -79,25 +81,11 @@ function AddUser() {
                 message: fbData[key]
             })
         }
-        
-        console.log(loadedData)
+
+        setData(loadedData);
+        setAllowData(true);
+        console.log(loadedData);
     });
-
-    function namedChangeHandler(event) {
-        setName(event.target.value)
-    }
-
-    function ageChangeHandler(event) {
-        setAge(event.target.value);
-    }
-
-    function emailChangeHandler(event) {
-        setEmail(event.target.value);
-    }
-
-    function passwordChangeHandler(event) {
-        setPassword(event.target.value);
-    }
 
     const errorHandler = () => {
         setErrorModal(null)
@@ -105,41 +93,52 @@ function AddUser() {
 
     useEffect(() => {
         getDataHandler()
-    }, [getDataHandler]);
+    }, []);
 
     return (
         <>
             {errorModal && <ErrorModal title={errorModal.title} msg={errorModal.msg} removeError={errorHandler}/>}
             <Card className={classes.input}>
-            <form onSubmit={addUserHandler} >
+            <form>
                 <label htmlFor="username">Username</label>
                 <input id="username" type="text"
-                    onChange={namedChangeHandler} 
+                    onChange={(event) => setName(event.target.value)} 
                     value={name}
                 />
 
                 <label htmlFor="age">Age</label>
                 <input id="age" type="number" 
-                    onChange={ageChangeHandler}
+                    onChange={(event) => setAge(event.target.value)}
                     value={age}
                 />
 
                 <label htmlFor="email">Email</label>
                 <input id="email" type="email" 
-                    onChange={emailChangeHandler}
+                    onChange={(event) => setEmail(event.target.value)}
                     value={email}
                 />
 
                 <label htmlFor="password">Password</label>
                 <input id="password" type="password" 
-                    onChange={passwordChangeHandler}
+                    onChange={(event) => setPassword(event.target.value)}
                     value={password}
                 />
 
-                <Button myType="submit"> Add user </Button>
+                <Button myType="submit" onClick={addUserHandler}> Add user </Button>
                 <Button myType="button" onClick={getDataHandler}> Get data </Button>
             </form>
             </Card>
+
+            {
+                allowData && data.map(item => (
+                    <Card className={classes.input}>
+                        {item.message.name}<br/>
+                        {item.message.age}<br/>
+                        {item.message.email}<br/>
+                        {item.message.password}
+                    </Card>
+                ))
+            }
             
         </>
     );
